@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tu opinión sobre Química para Todos</title>
+<meta name="description" content="Cuéntanos qué te pareció la página de Química para Todos. Al terminar se genera un PDF con tus respuestas.">
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+  :root {
+    --ink: #14171A;
+    --ink-2: #4A5058;
+    --paper: #FFFFFF;
+    --warm: #F6F5F1;
+    --primary: #17365F;
+    --primary-hover: #0F2744;
+    --selected: #EEF2F7;
+    --line: #D5D7DB;
+    --control: #6B717A;
+    --error: #A32D22;
+    --error-bg: #F9ECEA;
+    --success: #1B6B45;
+    --success-bg: #EAF3EE;
+    --serif: "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman", serif;
+    --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 var(--sans); }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 20px 64px; }
+  header.top { border-top: 2px solid var(--ink); padding-top: 24px; display: flex; gap: 20px; align-items: center; }
+  header.top img { width: 88px; height: 88px; border: 1px solid var(--line); padding: 6px; background: #fff; }
+  .kicker { font-size: 13px; color: var(--ink-2); margin: 0 0 4px; letter-spacing: .02em; }
+  h1 { font: 600 32px/1.15 var(--serif); margin: 0; }
+  .lead { font: 18px/1.6 var(--serif); margin: 20px 0 8px; }
+  .muted { color: var(--ink-2); font-size: 14px; }
+  a { color: var(--primary); text-underline-offset: 3px; }
+  fieldset { border: 0; border-top: 1px solid var(--ink); margin: 0; padding: 22px 0 22px; min-width: 0; }
+  .opts .row:last-child { border-bottom: 0; }
+  legend { padding: 0; font: 600 19px/1.35 var(--serif); display: flex; gap: 10px; float: left; width: 100%; margin: 0 0 12px; }
+  fieldset > legend + * { clear: both; }
+  legend .n { color: var(--ink-2); font: 500 15px/1.9 var(--sans); min-width: 1.6em; }
+  .req { color: var(--error); font: 400 14px var(--sans); }
+  .help { margin: 0 0 12px calc(1.6em + 10px); color: var(--ink-2); font-size: 14px; }
+  .opts { margin-left: calc(1.6em + 10px); }
+  .row { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 6px 10px; border-left: 3px solid transparent; cursor: pointer; border-bottom: 1px solid var(--line); }
+  .row:first-child { border-top: 1px solid var(--line); }
+  .row:hover { background: var(--warm); }
+  .row:has(input:checked) { background: var(--selected); border-left-color: var(--primary); }
+  input[type=radio] { width: 20px; height: 20px; accent-color: var(--primary); margin: 0; flex: none; }
+  .scale { margin-left: calc(1.6em + 10px); display: grid; grid-template-columns: repeat(5, 1fr); border: 1px solid var(--line); }
+  .scale label { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 0; cursor: pointer; border-right: 1px solid var(--line); min-height: 44px; font-weight: 600; }
+  .scale label:last-child { border-right: 0; }
+  .scale label:has(input:checked) { background: var(--selected); box-shadow: inset 0 -3px 0 var(--primary); }
+  .scale-ends { margin: 6px 0 0 calc(1.6em + 10px); display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-2); }
+  textarea, input[type=text] { width: 100%; font: 16px/1.5 var(--sans); color: var(--ink); border: 1px solid var(--control); border-radius: 2px; padding: 10px 12px; background: #fff; }
+  textarea { min-height: 96px; resize: vertical; }
+  .field { margin-left: calc(1.6em + 10px); }
+  :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+  .invalid legend { color: var(--error); }
+  .error-box { display: none; margin: 24px 0 0; padding: 12px 14px; border-left: 3px solid var(--error); background: var(--error-bg); color: var(--error); }
+  .actions { border-top: 2px solid var(--ink); margin-top: 28px; padding-top: 22px; }
+  .btn { appearance: none; border: 1px solid var(--primary); background: var(--primary); color: #fff; font: 600 16px var(--sans); padding: 12px 22px; border-radius: 2px; min-height: 48px; cursor: pointer; }
+  .btn:hover { background: var(--primary-hover); }
+  .btn.secondary { background: #fff; color: var(--primary); }
+  .btn.secondary:hover { background: var(--selected); }
+  .done { display: none; margin-top: 24px; padding: 16px 18px; border-left: 3px solid var(--success); background: var(--success-bg); }
+  .done h2 { font: 600 20px/1.3 var(--serif); margin: 0 0 8px; }
+  .done p { margin: 0 0 14px; }
+  .done .btns { display: flex; flex-wrap: wrap; gap: 10px; }
+  footer { margin-top: 40px; border-top: 1px solid var(--line); padding-top: 14px; }
+  @media (max-width: 480px) {
+    h1 { font-size: 26px; }
+    header.top img { width: 68px; height: 68px; }
+    .opts, .scale, .scale-ends, .field, .help { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <img src="logo.png" alt="Logo de Química para Todos">
+    <div>
+      <p class="kicker">Química para Todos</p>
+      <h1>Tu opinión sobre la página</h1>
+    </div>
+  </header>
+
+  <p class="lead">Gracias por probar <a href="https://gerardobenceno.github.io/quimica-para-todos/" target="_blank" rel="noopener">Química para Todos</a>, un curso gratuito de química orgánica con lecciones cortas y estructuras dibujadas como en un libro de texto. Contesta estas preguntas sobre lo que viste. Toma unos 3 minutos.</p>
+  <p class="muted">Tus respuestas no se envían a ningún servidor. Al terminar se genera un PDF en tu dispositivo y tú se lo mandas a quien te compartió esta página. Las preguntas con <span class="req">*</span> son obligatorias.</p>
+
+  <form id="f" novalidate>
+    <fieldset data-required="perfil">
+      <legend><span class="n">1.</span><span>¿Quién eres? <span class="req">*</span></span></legend>
+      <div class="opts" role="radiogroup">
+        <label class="row"><input type="radio" name="perfil" value="Estudiante de secundaria">Estudiante de secundaria</label>
+        <label class="row"><input type="radio" name="perfil" value="Estudiante de preparatoria">Estudiante de preparatoria</label>
+        <label class="row"><input type="radio" name="perfil" value="Estudiante universitario">Estudiante universitario</label>
+        <label class="row"><input type="radio" name="perfil" value="Docente">Docente</label>
+        <label class="row"><input type="radio" name="perfil" value="Otro">Otro</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="n">2.</span><span>Tu nombre</span></legend>
+      <p class="help">Opcional. Si no quieres ponerlo, déjalo vacío.</p>
+      <div class="field"><input type="text" name="nombre" maxlength="80" autocomplete="name" aria-label="Tu nombre"></div>
+    </fieldset>
+
+    <fieldset data-required="dispositivo">
+      <legend><span class="n">3.</span><span>¿En qué la usaste? <span class="req">*</span></span></legend>
+      <div class="opts">
+        <label class="row"><input type="radio" name="dispositivo" value="Celular">Celular</label>
+        <label class="row"><input type="radio" name="dispositivo" value="Computadora">Computadora</label>
+        <label class="row"><input type="radio" name="dispositivo" value="Tableta">Tableta</label>
+      </div>
+    </fieldset>
+
+    <fieldset data-required="lecciones">
+      <legend><span class="n">4.</span><span>¿Cuántas lecciones hiciste? <span class="req">*</span></span></legend>
+      <div class="opts">
+        <label class="row"><input type="radio" name="lecciones" value="Ninguna, solo exploré">Ninguna, solo exploré</label>
+        <label class="row"><input type="radio" name="lecciones" value="1 o 2">1 o 2</label>
+        <label class="row"><input type="radio" name="lecciones" value="3 a 5">3 a 5</label>
+        <label class="row"><input type="radio" name="lecciones" value="Más de 5">Más de 5</label>
+      </div>
+    </fieldset>
+
+    <fieldset data-required="facilidad" data-scale>
+      <legend><span class="n">5.</span><span>¿Qué tan fácil fue usar la página? <span class="req">*</span></span></legend>
+      <div class="scale"></div>
+      <div class="scale-ends"><span>1 Muy difícil</span><span>5 Muy fácil</span></div>
+    </fieldset>
+
+    <fieldset data-required="claridad" data-scale>
+      <legend><span class="n">6.</span><span>¿Qué tan claras fueron las explicaciones de los ejercicios? <span class="req">*</span></span></legend>
+      <div class="scale"></div>
+      <div class="scale-ends"><span>1 Nada claras</span><span>5 Muy claras</span></div>
+    </fieldset>
+
+    <fieldset data-required="estructuras">
+      <legend><span class="n">7.</span><span>¿Las estructuras químicas se ven bien? <span class="req">*</span></span></legend>
+      <p class="help">Los dibujos de las moléculas en los ejercicios y en las lecciones.</p>
+      <div class="opts">
+        <label class="row"><input type="radio" name="estructuras" value="Sí">Sí</label>
+        <label class="row"><input type="radio" name="estructuras" value="Parcial">Parcial, algunas sí y otras no</label>
+        <label class="row"><input type="radio" name="estructuras" value="No">No</label>
+      </div>
+    </fieldset>
+
+    <fieldset data-required="aprendizaje" data-scale>
+      <legend><span class="n">8.</span><span>¿Qué tanto te ayudó a entender los temas? <span class="req">*</span></span></legend>
+      <div class="scale"></div>
+      <div class="scale-ends"><span>1 Nada</span><span>5 Mucho</span></div>
+    </fieldset>
+
+    <fieldset data-required="general" data-scale>
+      <legend><span class="n">9.</span><span>En general, ¿qué tanto te gustó? <span class="req">*</span></span></legend>
+      <div class="scale"></div>
+      <div class="scale-ends"><span>1 Nada</span><span>5 Mucho</span></div>
+    </fieldset>
+
+    <fieldset data-required="recomendar">
+      <legend><span class="n">10.</span><span>¿Se la recomendarías a un compañero? <span class="req">*</span></span></legend>
+      <div class="opts">
+        <label class="row"><input type="radio" name="recomendar" value="Sí">Sí</label>
+        <label class="row"><input type="radio" name="recomendar" value="Tal vez">Tal vez</label>
+        <label class="row"><input type="radio" name="recomendar" value="No">No</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="n">11.</span><span>¿Qué fue lo que más te gustó?</span></legend>
+      <div class="field"><textarea name="gusto" maxlength="1500" aria-label="Lo que más te gustó"></textarea></div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="n">12.</span><span>¿Qué mejorarías o qué no te gustó?</span></legend>
+      <div class="field"><textarea name="mejora" maxlength="1500" aria-label="Qué mejorarías"></textarea></div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="n">13.</span><span>¿Encontraste algún error?</span></legend>
+      <p class="help">En la química, en un ejercicio o en la página. Si puedes, di en qué lección.</p>
+      <div class="field"><textarea name="errores" maxlength="1500" aria-label="Errores encontrados"></textarea></div>
+    </fieldset>
+
+    <p class="error-box" id="err" role="alert"></p>
+
+    <div class="actions">
+      <button class="btn" type="submit">Generar mi PDF</button>
+    </div>
+  </form>
+
+  <section class="done" id="done" aria-live="polite">
+    <h2>Tu PDF está listo</h2>
+    <p>Mándaselo a quien te compartió esta página, por WhatsApp o por correo. Gracias por tu tiempo.</p>
+    <div class="btns">
+      <button class="btn" type="button" id="share" hidden>Compartir PDF</button>
+      <button class="btn secondary" type="button" id="download">Descargar PDF</button>
+    </div>
+  </section>
+
+  <footer class="muted">
+    <a href="https://gerardobenceno.github.io/quimica-para-todos/" target="_blank" rel="noopener">Abrir Química para Todos</a>
+  </footer>
+</main>
+
+<script src="vendor/jspdf.umd.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  var form = document.getElementById('f');
+  var err = document.getElementById('err');
+  var done = document.getElementById('done');
+  var shareBtn = document.getElementById('share');
+  var downloadBtn = document.getElementById('download');
+  var pdfBlob = null;
+  var pdfName = '';
+
+  // Escalas de 1 a 5
+  Array.prototype.forEach.call(document.querySelectorAll('fieldset[data-scale]'), function (fs) {
+    var name = fs.getAttribute('data-required');
+    var box = fs.querySelector('.scale');
+    for (var i = 1; i <= 5; i++) {
+      var l = document.createElement('label');
+      var inp = document.createElement('input');
+      inp.type = 'radio'; inp.name = name; inp.value = String(i);
+      inp.setAttribute('aria-label', i + ' de 5');
+      l.appendChild(inp);
+      l.appendChild(document.createTextNode(String(i)));
+      box.appendChild(l);
+    }
+  });
+
+  var QUESTIONS = [
+    ['perfil', '1. ¿Quién eres?'],
+    ['nombre', '2. Nombre'],
+    ['dispositivo', '3. ¿En qué la usaste?'],
+    ['lecciones', '4. ¿Cuántas lecciones hiciste?'],
+    ['facilidad', '5. ¿Qué tan fácil fue usar la página?', 'scale'],
+    ['claridad', '6. ¿Qué tan claras fueron las explicaciones de los ejercicios?', 'scale'],
+    ['estructuras', '7. ¿Las estructuras químicas se ven bien?'],
+    ['aprendizaje', '8. ¿Qué tanto te ayudó a entender los temas?', 'scale'],
+    ['general', '9. En general, ¿qué tanto te gustó?', 'scale'],
+    ['recomendar', '10. ¿Se la recomendarías a un compañero?'],
+    ['gusto', '11. ¿Qué fue lo que más te gustó?'],
+    ['mejora', '12. ¿Qué mejorarías o qué no te gustó?'],
+    ['errores', '13. ¿Encontraste algún error?']
+  ];
+
+  function value(name) {
+    var el = form.elements[name];
+    if (!el) return '';
+    if (el.length !== undefined && el.tagName === undefined) {
+      for (var i = 0; i < el.length; i++) if (el[i].checked) return el[i].value;
+      return '';
+    }
+    return (el.value || '').trim();
+  }
+
+  // Las fuentes estándar del PDF solo tienen caracteres latinos; lo demás se cambia o se quita.
+  function clean(s) {
+    return String(s)
+      .replace(/[‘’‚′]/g, "'")
+      .replace(/[“”„″]/g, '"')
+      .replace(/[–—−]/g, '-')
+      .replace(/…/g, '...')
+      .replace(/[   ]/g, ' ')
+      .replace(/\r\n?/g, '\n')
+      .replace(/[^\n\x20-\x7E¡-ÿ]/g, '');
+  }
+
+  function today() {
+    var d = new Date();
+    var p = function (n) { return (n < 10 ? '0' : '') + n; };
+    return {
+      human: p(d.getDate()) + '/' + p(d.getMonth() + 1) + '/' + d.getFullYear() + ', ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ' h',
+      file: d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + '_' + p(d.getHours()) + p(d.getMinutes())
+    };
+  }
+
+  function slug(s) {
+    return clean(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 30);
+  }
+
+  function buildPdf() {
+    var jsPDF = window.jspdf.jsPDF;
+    var doc = new jsPDF({ unit: 'pt', format: 'letter' });
+    var W = doc.internal.pageSize.getWidth();
+    var H = doc.internal.pageSize.getHeight();
+    var M = 56, y = M, maxW = W - 2 * M;
+    var when = today();
+
+    function ensure(h) { if (y + h > H - M) { doc.addPage(); y = M; } }
+
+    doc.setDrawColor(20, 23, 26); doc.setLineWidth(1.5); doc.line(M, y, W - M, y); y += 26;
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(74, 80, 88);
+    doc.text('Química para Todos', M, y); y += 22;
+    doc.setFont('times', 'bold'); doc.setFontSize(22); doc.setTextColor(20, 23, 26);
+    doc.text('Opinión sobre la página', M, y); y += 20;
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(74, 80, 88);
+    doc.text('Respondido el ' + when.human, M, y); y += 12;
+    doc.text('gerardobenceno.github.io/quimica-para-todos', M, y); y += 18;
+    doc.setDrawColor(213, 215, 219); doc.setLineWidth(0.75); doc.line(M, y, W - M, y); y += 22;
+
+    QUESTIONS.forEach(function (q) {
+      var v = value(q[0]);
+      if (q[2] === 'scale' && v) v = v + ' de 5';
+      if (!v) v = 'Sin respuesta';
+      var qLines = doc.splitTextToSize(clean(q[1]), maxW);
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
+      var aLines;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(11);
+      aLines = doc.splitTextToSize(clean(v), maxW);
+      ensure(qLines.length * 15 + Math.min(aLines.length, 3) * 15 + 10);
+      doc.setFont('helvetica', 'bold'); doc.setTextColor(20, 23, 26);
+      doc.text(qLines, M, y); y += qLines.length * 15;
+      doc.setFont('helvetica', 'normal'); doc.setTextColor(v === 'Sin respuesta' ? 107 : 20, v === 'Sin respuesta' ? 113 : 23, v === 'Sin respuesta' ? 122 : 26);
+      aLines.forEach(function (line) { ensure(15); doc.text(line, M, y); y += 15; });
+      y += 12;
+    });
+
+    ensure(30);
+    doc.setDrawColor(213, 215, 219); doc.line(M, y, W - M, y); y += 16;
+    doc.setFontSize(9); doc.setTextColor(74, 80, 88);
+    doc.text('Gracias por tu opinión. Envía este PDF a quien te compartió la página.', M, y);
+
+    var name = value('nombre');
+    pdfName = 'opinion-quimica-para-todos_' + (name ? slug(name) + '_' : '') + when.file + '.pdf';
+    return doc.output('blob');
+  }
+
+  function download() {
+    if (!pdfBlob) return;
+    var url = URL.createObjectURL(pdfBlob);
+    var a = document.createElement('a');
+    a.href = url; a.download = pdfName;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  }
+
+  function canShareFile() {
+    try {
+      var f = new File([pdfBlob], pdfName, { type: 'application/pdf' });
+      return !!(navigator.canShare && navigator.canShare({ files: [f] }));
+    } catch (e) { return false; }
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var missing = [];
+    Array.prototype.forEach.call(form.querySelectorAll('fieldset[data-required]'), function (fs) {
+      var ok = !!value(fs.getAttribute('data-required'));
+      fs.classList.toggle('invalid', !ok);
+      if (!ok) missing.push(fs);
+    });
+    if (missing.length) {
+      err.textContent = missing.length === 1 ? 'Falta contestar 1 pregunta obligatoria. Está marcada en rojo.' : 'Faltan ' + missing.length + ' preguntas obligatorias. Están marcadas en rojo.';
+      err.style.display = 'block';
+      missing[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      var first = missing[0].querySelector('input');
+      if (first) first.focus({ preventScroll: true });
+      return;
+    }
+    err.style.display = 'none';
+    if (!window.jspdf) {
+      err.textContent = 'No se pudo crear el PDF. Recarga la página con conexión a internet e inténtalo de nuevo.';
+      err.style.display = 'block';
+      return;
+    }
+    pdfBlob = buildPdf();
+    shareBtn.hidden = !canShareFile();
+    done.style.display = 'block';
+    done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (shareBtn.hidden) download();
+  });
+
+  form.addEventListener('change', function (e) {
+    var fs = e.target.closest('fieldset');
+    if (fs && fs.classList.contains('invalid') && value(fs.getAttribute('data-required'))) fs.classList.remove('invalid');
+  });
+
+  downloadBtn.addEventListener('click', download);
+  shareBtn.addEventListener('click', function () {
+    var f = new File([pdfBlob], pdfName, { type: 'application/pdf' });
+    navigator.share({ files: [f], title: 'Mi opinión sobre Química para Todos' }).catch(function () {});
+  });
+})();
+</script>
+</body>
+</html>
